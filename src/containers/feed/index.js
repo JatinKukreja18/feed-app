@@ -3,6 +3,7 @@ import axios from 'axios';
 import PostCard from "../../components/post-card";
 import { Skeleton, Row, Col} from 'antd';
 import "./style.scss";
+import { BarsOutlined, AppstoreOutlined} from '@ant-design/icons';
 
 const pagedEndpoints = [
     'http://www.mocky.io/v2/59b3f0b0100000e30b236b7e',
@@ -12,6 +13,7 @@ const pagedEndpoints = [
 const Feed = ()=>{
 
     const [allposts, setAllPosts] = useState([]);
+    const [isGrid, setIsGrid] = useState(false);
     useEffect(()=>{
         axios.get(pagedEndpoints[0])
         .then(res => {
@@ -33,18 +35,27 @@ const Feed = ()=>{
                     </Row>)
     return(
      <>
-        <ul className={`post-list`}>
+        <div className="list-options">
+            <a className={`${!isGrid?'active':''}`} onClick={()=>setIsGrid(false)}>
+                <BarsOutlined />
+            </a>
+            <a className={`${isGrid?'active':''}`} onClick={()=>setIsGrid(true)}>
+                <AppstoreOutlined />
+            </a>
+        </div>
+        <div className={`post-list`}>
            
             {allposts.length? allposts.map((post,i) => {
                 return(
-                    <PostCard key={`post-${i}`} data={post} />
+                        <PostCard key={`post-${i}`} data={post} isGrid={isGrid}/>
+                    
                 )
             }):
             <div style={{'width':'100%'}}>
                 {skeleton}
             </div>
             }
-        </ul>
+        </div>
      </>
 
     )

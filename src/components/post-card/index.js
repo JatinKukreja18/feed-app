@@ -33,7 +33,7 @@ const PostCard = props =>{
             .substr(-2);
     }
     return(
-     <div className="feed-post is-grid">
+     <div className={`feed-post ${props.isGrid ? 'is-grid': ''}`}>
          <div className="fp-image">
             <img src={props.data.thumbnail_image} />
          </div>

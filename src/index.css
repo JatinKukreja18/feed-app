@@ -19,6 +19,7 @@ code {
   width: 100%;
   position: relative;
   margin: auto;
+  padding: 0 30px;
 }
 .custom-drawer .ant-drawer-content-wrapper{
   height: 256px;
