@@ -13,3 +13,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.container{
+  max-width: 1024px;
+  width: 100%;
+  position: relative;
+  margin: auto;
+}
+.custom-drawer .ant-drawer-content-wrapper{
+  height: 256px;
+  max-width: calc(1024px - 80px);
+  margin: auto;
+  display: block;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+}
