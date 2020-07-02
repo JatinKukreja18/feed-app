@@ -11,9 +11,6 @@ function App() {
   return (
     <main className="container">
       <Feed/>
-      <Button type="primary" onClick={()=>setVisible(true)}>
-            Open
-          </Button>
       <Drawer
           title="Basic Drawer"
           placement="right"

@@ -7,6 +7,7 @@
     display: flex;
     transition: box-shadow .5s, padding .5s;
     border: 1px solid #eee;
+    background-color: #fff;
     &:hover{
         cursor: pointer;
         box-shadow: 1px 1px 14px 1px #ddd;
@@ -47,6 +48,7 @@
         position: absolute;
         right: 0;
         bottom: 0;
+        font-size: 12px;
         li{
             padding: 0 10px;
             .anticon{
@@ -64,6 +66,52 @@
             width: 100%;
             margin: 0 0 10px 0;
 
+        }
+    }
+}
+@media only screen and (max-width: 991px){
+    .feed-post{
+        &.is-grid{
+            width: calc(50% - 10px);
+            &:nth-child(even){
+                margin-right: 0;
+            }
+            .fp-image{
+                height: 200px;
+                width: 100%;
+                margin: 0 0 10px 0;
+    
+            }
+        }
+    }
+}
+@media only screen and (max-width: 650px){
+    .feed-post .count-info{
+        position: relative;
+        width: 100%;
+        margin-top: 5px;
+        font-size: 12px;
+        justify-content: flex-end;
+    }
+}
+@media only screen and (max-width:575px){
+    .feed-post {
+        .count-info{
+        position: relative;
+        width: 100%;
+        margin-top: 5px;
+        font-size: 12px;
+        justify-content: flex-end;
+        }
+        &.is-grid{
+            width: calc(100%);
+            margin-right: 0;
+            .fp-image{
+                height: 200px;
+                width: 100%;
+                margin: 0 0 10px 0;
+    
+            }
         }
     }
 }
