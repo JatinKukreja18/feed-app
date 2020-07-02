@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Feed  from "./containers/feed";
-import { Drawer, Button } from 'antd';
+import { Drawer } from 'antd';
 
 function App() {
 
@@ -10,16 +9,17 @@ function App() {
 
   return (
     <main className="container">
+      <div className="banner">
+          Event Feed
+      </div>
       <Feed/>
       <Drawer
           title="Basic Drawer"
-          placement="right"
           closable={false}
           onClose={()=>setVisible(false)}
           visible={visible}
           getContainer={false}
           className={'custom-drawer'}
-          // style={{ position: 'absolute' }}
           placement={'bottom'}
         >
           <p>Some contents...</p>

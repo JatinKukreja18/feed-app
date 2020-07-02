@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import PostCard from "../../components/post-card";
-import { Skeleton, Row, Col,Select,Pagination} from 'antd';
-import { BarsOutlined, AppstoreOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
+import { Skeleton, Row, Col,Select,Pagination, Button} from 'antd';
+import { BarsOutlined, AppstoreOutlined} from '@ant-design/icons';
 import "./style.scss";
 
 
@@ -19,18 +19,24 @@ const Feed = ()=>{
     const [allposts, setAllPosts] = useState([]);
     const [isGrid, setIsGrid] = useState(false);
     const [currentPage,setCurrentPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
     
     const onChange = page => {
         console.log(page);
+        setIsLoading(true);
         document.scrollingElement.style.scrollBehavior = 'smooth';
         document.scrollingElement.scrollTop = 0;
         axios.get(pagedEndpoints[page - 1])
         .then(res => {
             setAllPosts([]);
-            const pageData = res.data;
             setAllPosts(res.data.posts);
+            setIsLoading(false);
             OriginalPostArr = [...res.data.posts];
             
+        })
+        .catch(err=>{
+            setIsLoading(false);
+            console.log(err);
         })
         setCurrentPage(page);
     };
@@ -74,10 +80,14 @@ const Feed = ()=>{
     useEffect(()=>{
         axios.get(pagedEndpoints[0])
         .then(res => {
-            const pageData = res.data;
             setAllPosts(res.data.posts);
+            setIsLoading(false);
             OriginalPostArr = [...res.data.posts];
             console.log(OriginalPostArr);  
+        })
+        .catch(err=>{
+            setIsLoading(false);
+            console.log(err);
         })
     },[])
     const skeleton = (<Row>
@@ -93,7 +103,7 @@ const Feed = ()=>{
                     </Row>)
     return(
      <>
-        <div className="feed-options">
+        <div className={`feed-options ${allposts.length === 0? 'disabled':null}`}>
             <div className="list-options">
                 <a className={`${!isGrid?'active':''}`} onClick={()=>setIsGrid(false)}>
                     <BarsOutlined />
@@ -115,6 +125,8 @@ const Feed = ()=>{
                 </Select>   
             </div>
         </div>
+        {!isLoading? 
+        <>
         <div className={`post-list`}>
            
             {allposts.length? allposts.map((post,i) => {
@@ -122,15 +134,26 @@ const Feed = ()=>{
                         <PostCard key={`post-${i}`} data={post} isGrid={isGrid}/>
                     
                 )
-            }):
-            <div style={{'width':'100%'}}>
-                {skeleton}
-            </div>
-            }
+            }): <div className="error-block">
+                    <img src="/assets/blank.svg"/>
+                    <p>Something seems to be not working!
+                        <br/>
+                        <span>
+                        Try refreshing the page or check back later.
+                        </span>
+                    </p>
+                    <Button type="primary">Refresh</Button>
+                </div>}
+
         </div>
-        {allposts.length?
-        <Pagination className="custom-pagination" current={currentPage} onChange={onChange} total={21} defaultPageSiz={7} />
-        :null}
+            {allposts.length?
+            <Pagination className="custom-pagination" current={currentPage} onChange={onChange} total={21} defaultPageSiz={7} />
+            :null}
+            </>
+        :
+        <div style={{'width':'100%'}}>
+            {skeleton}
+        </div>}
      </>
 
     )
