@@ -21,24 +21,27 @@ const Feed = ()=>{
     const [currentPage,setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     
-    const onChange = page => {
-        console.log(page);
-        setIsLoading(true);
-        document.scrollingElement.style.scrollBehavior = 'smooth';
-        document.scrollingElement.scrollTop = 0;
-        axios.get(pagedEndpoints[page - 1])
-        .then(res => {
-            setAllPosts([]);
-            setAllPosts(res.data.posts);
+    const onChange = async page => {
+        try{
+
+            console.log(page);
+            setIsLoading(true);
+            document.scrollingElement.style.scrollBehavior = 'smooth';
+            document.scrollingElement.scrollTop = 0;
+    
+            const response = await axios.get(pagedEndpoints[page - 1]);
+            // setAllPosts([]);
+            setAllPosts(response.data.posts);
             setIsLoading(false);
-            OriginalPostArr = [...res.data.posts];
-            
-        })
-        .catch(err=>{
+            OriginalPostArr = [...response.data.posts];
+           
+            setCurrentPage(page);
+        }
+        catch(err){
+            setAllPosts([]);
             setIsLoading(false);
             console.log(err);
-        })
-        setCurrentPage(page);
+        }
     };
     const handleChange = (value)=> {
         console.log(`selected ${value}`);
@@ -64,7 +67,6 @@ const Feed = ()=>{
                 break;
             case 'default':
                 sortedPosts = OriginalPostArr;
-                console.log(sortedPosts);
                 
                 break;
             
@@ -72,8 +74,6 @@ const Feed = ()=>{
                 sortedPosts = [...OriginalPostArr];
                 break;
         }
-        console.log(OriginalPostArr);
-        console.log(sortedPosts);
         
         setAllPosts([...sortedPosts])
       }
@@ -142,7 +142,7 @@ const Feed = ()=>{
                         Try refreshing the page or check back later.
                         </span>
                     </p>
-                    <Button type="primary">Refresh</Button>
+                    <Button type="primary" onClick={window.location.reload()}>Refresh</Button>
                 </div>}
 
         </div>
