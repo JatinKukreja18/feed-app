@@ -20,8 +20,6 @@ const PostCard = props =>{
     let formattedDate = '';
     if (props.data.event_date) {
         const date = new Date(props.data.event_date);
-        console.log(date);
-        console.log(props.data.event_date);
         formattedDate = date.getDate() +
         nth(date.getDate()) +
         ' ' +
