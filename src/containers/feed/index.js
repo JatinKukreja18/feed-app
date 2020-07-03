@@ -4,6 +4,7 @@ import PostCard from "../../components/post-card";
 import { Skeleton, Row, Col,Select,Pagination, Button} from 'antd';
 import { BarsOutlined, AppstoreOutlined} from '@ant-design/icons';
 import "./style.scss";
+import { get, set } from 'idb-keyval';
 
 
 const { Option } = Select;
@@ -14,36 +15,31 @@ const pagedEndpoints = [
     'http://www.mocky.io/v2/59ac28a9100000ce0bf9c236',
     'http://www.mocky.io/v2/59ac293b100000d60bf9c239',
 ]
-const Feed = ()=>{
+const Feed = (props)=>{
 
-    const [allposts, setAllPosts] = useState([]);
-    const [isGrid, setIsGrid] = useState(false);
-    const [currentPage,setCurrentPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(true);
+    const [state,setState] = useState({
+        isLoading: false,
+        allposts : [],
+        isGrid:false,
+        currentPage:1
+    })
     
-    const onChange = async page => {
+    async function onChange(page){
         try{
-
-            console.log(page);
-            setIsLoading(true);
+            setState({...state,isLoading:true})
             document.scrollingElement.style.scrollBehavior = 'smooth';
             document.scrollingElement.scrollTop = 0;
-    
             const response = await axios.get(pagedEndpoints[page - 1]);
-            // setAllPosts([]);
-            setAllPosts(response.data.posts);
-            setIsLoading(false);
+            setState({...state, isLoading:false, allposts:response.data.posts,currentPage:page});
             OriginalPostArr = [...response.data.posts];
-           
-            setCurrentPage(page);
         }
         catch(err){
-            setAllPosts([]);
-            setIsLoading(false);
+            setState({...state, isLoading:false, allposts:[]});
             console.log(err);
         }
     };
     const handleChange = (value)=> {
+        const {allposts} = state;
         console.log(`selected ${value}`);
         let sortedPosts = [];
         switch (value) {
@@ -75,20 +71,30 @@ const Feed = ()=>{
                 break;
         }
         
-        setAllPosts([...sortedPosts])
+        setState({...state,allposts: [...sortedPosts]})
       }
-    useEffect(()=>{
-        axios.get(pagedEndpoints[0])
-        .then(res => {
-            setAllPosts(res.data.posts);
-            setIsLoading(false);
-            OriginalPostArr = [...res.data.posts];
-            console.log(OriginalPostArr);  
-        })
-        .catch(err=>{
-            setIsLoading(false);
-            console.log(err);
-        })
+    useEffect( ()=>{
+        console.log('useeffect');
+        
+        async function getPosts(){
+            try{
+                console.log('try');
+                const response = await axios.get(pagedEndpoints[0]);
+                setState({...state,isLoading:false,allposts: response.data.posts});
+                OriginalPostArr = [...response.data.posts];
+                // set('posts', OriginalPostArr);
+                
+            }
+            catch(err){
+                
+                setState({...state,isLoading:false});
+                console.log(err);
+                // const offlinePosts = get('posts');
+                // console.log(offlinePosts);
+                
+            } 
+        }
+        getPosts();
     },[])
     const skeleton = (<Row>
                         <Col xs={24} className="custom-skeleton">
@@ -103,12 +109,13 @@ const Feed = ()=>{
                     </Row>)
     return(
      <>
-        <div className={`feed-options ${allposts.length === 0? 'disabled':null}`}>
+        {/* {alert(state.isLoading)} */}
+        <div className={`feed-options ${state.allposts.length === 0? 'disabled':null}`}>
             <div className="list-options">
-                <a className={`${!isGrid?'active':''}`} onClick={()=>setIsGrid(false)}>
+                <a className={`${!state.isGrid&&'active'}`} onClick={()=>setState({...state,isGrid:false})}>
                     <BarsOutlined />
                 </a>
-                <a className={`${isGrid?'active':''}`} onClick={()=>setIsGrid(true)}>
+                <a className={`${state.isGrid&&'active'}`} onClick={()=>setState({...state,isGrid:true})}>
                     <AppstoreOutlined />
                 </a>
             </div>
@@ -125,37 +132,36 @@ const Feed = ()=>{
                 </Select>   
             </div>
         </div>
-        {!isLoading? 
+        {!state.isLoading? 
         <>
-        <div className={`post-list`}>
-           
-            {allposts.length? allposts.map((post,i) => {
-                return(
-                        <PostCard key={`post-${i}`} data={post} isGrid={isGrid}/>
-                    
-                )
-            }): <div className="error-block">
-                    <img src="/assets/blank.svg"/>
-                    <p>Something seems to be not working!
-                        <br/>
-                        <span>
-                        Try refreshing the page or check back later.
-                        </span>
-                    </p>
-                    <Button type="primary" onClick={window.location.reload()}>Refresh</Button>
-                </div>}
+            <div className={`post-list`}>
+            
+                {state.allposts.length? state.allposts.map((post,i) => {
+                    return(
+                            <PostCard postClick={() => props.postSelected(post)} key={`post-${i}`} data={post} isGrid={state.isGrid}/>
+                        
+                    )
+                }): <div className="error-block">
+                        <img src="/assets/blank.svg"/>
+                        <p>Something seems to be not working!
+                            <br/>
+                            <span>
+                            Try refreshing the page or check back later.
+                            </span>
+                        </p>
+                        <Button type="primary" onClick={()=>window.location.reload()}>Refresh</Button>
+                    </div>}
 
-        </div>
-            {allposts.length?
-            <Pagination className="custom-pagination" current={currentPage} onChange={onChange} total={21} defaultPageSiz={7} />
+            </div>
+            {state.allposts.length?
+            <Pagination className="custom-pagination" current={state.currentPage} onChange={onChange} total={21} defaultPageSize={7} />
             :null}
-            </>
+        </>
         :
         <div style={{'width':'100%'}}>
             {skeleton}
         </div>}
      </>
-
     )
 }
 
