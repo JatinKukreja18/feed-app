@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/feed-app/static/css/main.700a81dd.chunk.css",
-    "main.js": "/feed-app/static/js/main.a4b1d1d7.chunk.js",
-    "main.js.map": "/feed-app/static/js/main.a4b1d1d7.chunk.js.map",
+    "main.js": "/feed-app/static/js/main.800c7e57.chunk.js",
+    "main.js.map": "/feed-app/static/js/main.800c7e57.chunk.js.map",
     "runtime-main.js": "/feed-app/static/js/runtime-main.7aeddc88.js",
     "runtime-main.js.map": "/feed-app/static/js/runtime-main.7aeddc88.js.map",
     "static/css/2.c27a359e.chunk.css": "/feed-app/static/css/2.c27a359e.chunk.css",
     "static/js/2.58989253.chunk.js": "/feed-app/static/js/2.58989253.chunk.js",
     "static/js/2.58989253.chunk.js.map": "/feed-app/static/js/2.58989253.chunk.js.map",
     "index.html": "/feed-app/index.html",
-    "precache-manifest.592b5e724002e8b76a3806f762d67f7b.js": "/feed-app/precache-manifest.592b5e724002e8b76a3806f762d67f7b.js",
+    "precache-manifest.594182ee5b35533e3cc1c597ce0af304.js": "/feed-app/precache-manifest.594182ee5b35533e3cc1c597ce0af304.js",
     "service-worker.js": "/feed-app/service-worker.js",
     "static/css/2.c27a359e.chunk.css.map": "/feed-app/static/css/2.c27a359e.chunk.css.map",
     "static/css/main.700a81dd.chunk.css.map": "/feed-app/static/css/main.700a81dd.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.c27a359e.chunk.css",
     "static/js/2.58989253.chunk.js",
     "static/css/main.700a81dd.chunk.css",
-    "static/js/main.a4b1d1d7.chunk.js"
+    "static/js/main.800c7e57.chunk.js"
   ]
 }
